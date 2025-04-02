@@ -1,7 +1,8 @@
 public class HelloWorld{
 	public static void main (String [] args {
 		System.out.println("HelloWord");
+		System.out.println("DemoGitHub");
 	}
 }
 
-untracked - git add -> tracked -> commit => unmodified
+//untracked - git add -> tracked -> commit => unmodified
