@@ -2,7 +2,7 @@ public class HelloWorld{
 	public static void main (String [] args {
 		System.out.println("HelloWord");
 		System.out.println("DemoGitHub");
-		System.out.println("Hihihi");
+		System.out.println("Hihihi");System.out.println("Hihihi");
 	}
 }
 
