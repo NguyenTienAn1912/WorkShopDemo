@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit ? 'Chỉnh Sửa Bình Giữ Nhiệt' : 'Thêm Mới Bình Giữ Nhiệt'}"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        .form-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px 15px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-custom {
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        .invalid-feedback {
+            font-size: 0.875rem;
+        }
+        .form-floating > label {
+            font-weight: 500;
+        }
+        .input-group-text {
+            border-radius: 0 10px 10px 0;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-left: none;
+        }
+        .form-control.currency {
+            border-radius: 10px 0 0 10px;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-coffee me-2"></i>Thermos Manager
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="/thermos" class="btn btn-outline-light me-2">
+                    <i class="fas fa-list me-1"></i>Danh Sách
+                </a>
+                <a href="/logout" class="btn btn-light">
+                    <i class="fas fa-sign-out-alt me-1"></i>Đăng Xuất
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-section">
+                    <div class="form-header text-center">
+                        <h2 class="fw-bold mb-2">
+                            <i th:class="${isEdit ? 'fas fa-edit' : 'fas fa-plus'} + ' me-2'"></i>
+                            <span th:text="${isEdit ? 'Chỉnh Sửa Bình Giữ Nhiệt' : 'Thêm Mới Bình Giữ Nhiệt'}"></span>
+                        </h2>
+                        <p class="mb-0" th:text="${isEdit ? 'Cập nhật thông tin bình giữ nhiệt' : 'Điền thông tin chi tiết về bình giữ nhiệt mới'}"></p>
+                    </div>
+
+                    <form th:action="${isEdit ? '/thermos/edit/' + bottle.id : '/thermos/new'}" 
+                          th:object="${bottle}" method="post" novalidate>
+                        
+                        <!-- Thông tin cơ bản -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label required">Tên Bình Giữ Nhiệt</label>
+                                <input type="text" class="form-control" th:field="*{name}" 
+                                       th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                       placeholder="Nhập tên bình giữ nhiệt">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" 
+                                     th:errors="*{name}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="brand" class="form-label required">Thương Hiệu</label>
+                                <select class="form-select" th:field="*{brand}" 
+                                        th:classappend="${#fields.hasErrors('brand')} ? 'is-invalid' : ''">
+                                    <option value="">Chọn thương hiệu</option>
+                                    <option value="Thermos">Thermos</option>
+                                    <option value="Stanley">Stanley</option>
+                                    <option value="Zojirushi">Zojirushi</option>
+                                    <option value="Contigo">Contigo</option>
+                                    <option value="Hydro Flask">Hydro Flask</option>
+                                    <option value="Yeti">Yeti</option>
+                                    <option value="Lock&Lock">Lock&Lock</option>
+                                    <option value="Elmich">Elmich</option>
+                                    <option value="Zebra">Zebra</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('brand')}" 
+                                     th:errors="*{brand}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="capacity" class="form-label required">Dung Tích (ml)</label>
+                                <input type="number" class="form-control" th:field="*{capacity}" 
+                                       th:classappend="${#fields.hasErrors('capacity')} ? 'is-invalid' : ''"
+                                       placeholder="500" min="1" step="1">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('capacity')}" 
+                                     th:errors="*{capacity}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="color" class="form-label required">Màu Sắc</label>
+                                <select class="form-select" th:field="*{color}" 
+                                        th:classappend="${#fields.hasErrors('color')} ? 'is-invalid' : ''">
+                                    <option value="">Chọn màu sắc</option>
+                                    <option value="Đen">Đen</option>
+                                    <option value="Trắng">Trắng</option>
+                                    <option value="Xanh dương">Xanh dương</option>
+                                    <option value="Xanh lá">Xanh lá</option>
+                                    <option value="Đỏ">Đỏ</option>
+                                    <option value="Hồng">Hồng</option>
+                                    <option value="Vàng">Vàng</option>
+                                    <option value="Xám">Xám</option>
+                                    <option value="Nâu">Nâu</option>
+                                    <option value="Tím">Tím</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('color')}" 
+                                     th:errors="*{color}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="price" class="form-label required">Giá (VND)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control currency" th:field="*{price}" 
+                                           th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''"
+                                           placeholder="500000" min="1" step="1000">
+                                    <span class="input-group-text">VND</span>
+                                </div>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" 
+                                     th:errors="*{price}"></div>
+                            </div>
+                        </div>
+
+                        <!-- Thông tin chi tiết -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="material" class="form-label">Chất Liệu</label>
+                                <select class="form-select" th:field="*{material}">
+                                    <option value="">Chọn chất liệu</option>
+                                    <option value="Thép không gỉ">Thép không gỉ</option>
+                                    <option value="Nhựa">Nhựa</option>
+                                    <option value="Thủy tinh">Thủy tinh</option>
+                                    <option value="Ceramic">Ceramic</option>
+                                    <option value="Titanium">Titanium</option>
+                                    <option value="Hợp kim nhôm">Hợp kim nhôm</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="imageUrl" class="form-label">URL Hình Ảnh</label>
+                                <input type="url" class="form-control" th:field="*{imageUrl}" 
+                                       placeholder="https://example.com/image.jpg">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="keepHotHours" class="form-label">Giữ Nhiệt (Giờ)</label>
+                                <input type="number" class="form-control" th:field="*{keepHotHours}" 
+                                       placeholder="6" min="1" max="24">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="keepColdHours" class="form-label">Giữ Lạnh (Giờ)</label>
+                                <input type="number" class="form-control" th:field="*{keepColdHours}" 
+                                       placeholder="12" min="1" max="48">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Mô Tả</label>
+                            <textarea class="form-control" th:field="*{description}" rows="3" 
+                                      placeholder="Mô tả chi tiết về bình giữ nhiệt..."></textarea>
+                        </div>
+
+                        <!-- Nút submit -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/thermos" class="btn btn-secondary btn-custom me-md-2">
+                                <i class="fas fa-times me-2"></i>Hủy
+                            </a>
+                            <button type="submit" class="btn btn-primary-custom btn-custom">
+                                <i th:class="${isEdit ? 'fas fa-save' : 'fas fa-plus'} + ' me-2'"></i>
+                                <span th:text="${isEdit ? 'Cập Nhật' : 'Thêm Mới'}"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Preview card (nếu có URL hình ảnh) -->
+                <div class="card mt-4" id="previewCard" style="display: none;">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-eye me-2"></i>Preview Hình Ảnh</h6>
+                    </div>
+                    <div class="card-body text-center">
+                        <img id="previewImage" src="" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Preview image when URL is entered
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageUrlInput = document.getElementById('imageUrl');
+            const previewCard = document.getElementById('previewCard');
+            const previewImage = document.getElementById('previewImage');
+
+            function updatePreview() {
+                const url = imageUrlInput.value.trim();
+                if (url && isValidUrl(url)) {
+                    previewImage.src = url;
+                    previewCard.style.display = 'block';
+                } else {
+                    previewCard.style.display = 'none';
+                }
+            }
+
+            function isValidUrl(string) {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (_) {
+                    return false;
+                }
+            }
+
+            imageUrlInput.addEventListener('input', updatePreview);
+            
+            // Initial check
+            updatePreview();
+
+            // Format price input
+            const priceInput = document.getElementById('price');
+            priceInput.addEventListener('input', function() {
+                // Remove non-numeric characters except digits
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            // Form validation enhancement
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+
+            // Auto-focus first invalid field
+            const firstInvalidField = document.querySelector('.is-invalid');
+            if (firstInvalidField) {
+                firstInvalidField.focus();
+            }
+        });
+    </script>
+</body>
+</html>

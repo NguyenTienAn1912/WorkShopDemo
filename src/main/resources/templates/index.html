@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Bình Giữ Nhiệt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+        }
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="/">
+                <i class="fas fa-coffee me-2"></i>Thermos Manager
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div th:if="${user}">
+                    <span class="navbar-text me-3">
+                        Xin chào, <strong th:text="${user.attributes.name}"></strong>!
+                    </span>
+                    <a href="/thermos" class="btn btn-primary me-2">
+                        <i class="fas fa-list me-1"></i>Quản Lý
+                    </a>
+                    <a href="/logout" class="btn btn-outline-secondary">
+                        <i class="fas fa-sign-out-alt me-1"></i>Đăng Xuất
+                    </a>
+                </div>
+                <div th:unless="${user}">
+                    <a href="/login" class="btn btn-primary">
+                        <i class="fab fa-google me-1"></i>Đăng Nhập với Google
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-coffee me-3"></i>
+                        Quản Lý Bình Giữ Nhiệt
+                    </h1>
+                    <p class="lead mb-4">
+                        Hệ thống quản lý bình giữ nhiệt chuyên nghiệp với Firebase và Google Authentication
+                    </p>
+                    <div th:if="${user}">
+                        <a href="/thermos" class="btn btn-light btn-lg me-3">
+                            <i class="fas fa-list me-2"></i>Xem Danh Sách
+                        </a>
+                        <a href="/thermos/new" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-plus me-2"></i>Thêm Mới
+                        </a>
+                    </div>
+                    <div th:unless="${user}">
+                        <a href="/login" class="btn btn-light btn-lg">
+                            <i class="fab fa-google me-2"></i>Đăng Nhập để Bắt Đầu
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="display-5 fw-bold mb-3">Tính Năng Nổi Bật</h2>
+                    <p class="lead text-muted">
+                        Quản lý bình giữ nhiệt một cách hiệu quả với các tính năng hiện đại
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100 text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <h5 class="fw-bold">Đăng Nhập Google</h5>
+                        <p class="text-muted">
+                            Xác thực an toàn và nhanh chóng với tài khoản Google của bạn
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100 text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <h5 class="fw-bold">Hiển Thị Danh Sách</h5>
+                        <p class="text-muted">
+                            Xem danh sách tất cả bình giữ nhiệt được lưu trữ trên Firebase
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100 text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h5 class="fw-bold">Thêm Mới</h5>
+                        <p class="text-muted">
+                            Thêm mới bình giữ nhiệt với đầy đủ thông tin chi tiết
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100 text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h5 class="fw-bold">Cập Nhật & Xóa</h5>
+                        <p class="text-muted">
+                            Chỉnh sửa thông tin hoặc xóa bình giữ nhiệt một cách dễ dàng
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2024 Thermos Manager. Được phát triển với Spring Boot & Firebase.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
