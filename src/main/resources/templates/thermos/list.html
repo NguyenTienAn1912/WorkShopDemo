@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Bình Giữ Nhiệt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .table-responsive {
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .table thead th {
+            border: none;
+            font-weight: 600;
+        }
+        .btn-action {
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 8px;
+        }
+        .search-box {
+            border-radius: 25px;
+            border: 2px solid #e9ecef;
+            padding-left: 50px;
+        }
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        .price-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .capacity-badge {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-coffee me-2"></i>Thermos Manager
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    Xin chào, <strong th:text="${user.attributes.name}"></strong>!
+                </span>
+                <a href="/" class="btn btn-outline-light me-2">
+                    <i class="fas fa-home me-1"></i>Trang Chủ
+                </a>
+                <a href="/logout" class="btn btn-light">
+                    <i class="fas fa-sign-out-alt me-1"></i>Đăng Xuất
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Header với tìm kiếm và nút thêm mới -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 class="fw-bold text-primary">
+                    <i class="fas fa-list me-2"></i>Danh Sách Bình Giữ Nhiệt
+                </h2>
+                <p class="text-muted">Quản lý tất cả bình giữ nhiệt của bạn</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="/thermos/new" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-2"></i>Thêm Mới
+                </a>
+            </div>
+        </div>
+
+        <!-- Thanh tìm kiếm -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <form method="get" action="/thermos">
+                    <div class="position-relative">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="search" class="form-control search-box" 
+                               placeholder="Tìm kiếm theo tên hoặc thương hiệu..." 
+                               th:value="${searchKeyword}">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Thông báo -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Kết quả tìm kiếm -->
+        <div th:if="${searchKeyword}" class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            Tìm thấy <strong th:text="${bottles.size()}"></strong> kết quả cho từ khóa: 
+            "<strong th:text="${searchKeyword}"></strong>"
+            <a href="/thermos" class="btn btn-sm btn-outline-info ms-2">
+                <i class="fas fa-times me-1"></i>Xóa bộ lọc
+            </a>
+        </div>
+
+        <!-- Danh sách bình giữ nhiệt -->
+        <div class="table-responsive bg-white">
+            <table class="table table-hover mb-0" th:if="${!bottles.empty}">
+                <thead>
+                    <tr>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Thương Hiệu</th>
+                        <th>Dung Tích</th>
+                        <th>Màu Sắc</th>
+                        <th>Giá</th>
+                        <th>Chất Liệu</th>
+                        <th class="text-center">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="bottle : ${bottles}">
+                        <td>
+                            <strong th:text="${bottle.name}"></strong>
+                            <br>
+                            <small class="text-muted" th:if="${bottle.description}" 
+                                   th:text="${#strings.abbreviate(bottle.description, 50)}"></small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary" th:text="${bottle.brand}"></span>
+                        </td>
+                        <td>
+                            <span class="capacity-badge" th:text="${bottle.capacity} + ' ml'"></span>
+                        </td>
+                        <td>
+                            <span class="badge" style="background-color: #6c757d;" th:text="${bottle.color}"></span>
+                        </td>
+                        <td>
+                            <span class="price-badge" th:text="${#numbers.formatDecimal(bottle.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
+                        </td>
+                        <td>
+                            <span th:text="${bottle.material ?: 'Chưa cập nhật'}" class="text-muted"></span>
+                        </td>
+                        <td class="text-center">
+                            <a th:href="@{'/thermos/view/' + ${bottle.id}}" 
+                               class="btn btn-info btn-sm btn-action" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a th:href="@{'/thermos/edit/' + ${bottle.id}}" 
+                               class="btn btn-warning btn-sm btn-action" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-sm btn-action" 
+                                    title="Xóa" onclick="confirmDelete(this)"
+                                    th:data-id="${bottle.id}" th:data-name="${bottle.name}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Thông báo khi không có dữ liệu -->
+            <div th:if="${bottles.empty}" class="text-center py-5">
+                <i class="fas fa-coffee fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Chưa có bình giữ nhiệt nào</h4>
+                <p class="text-muted">Hãy thêm bình giữ nhiệt đầu tiên của bạn!</p>
+                <a href="/thermos/new" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Thêm Mới Ngay
+                </a>
+            </div>
+        </div>
+
+        <!-- Thống kê -->
+        <div class="row mt-4" th:if="${!bottles.empty}">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">Thống Kê</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h4 class="text-primary" th:text="${bottles.size()}"></h4>
+                                <small class="text-muted">Tổng số bình</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-success" th:text="${#aggregates.sum(bottles.![price])} + ' VND'"></h4>
+                                <small class="text-muted">Tổng giá trị</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-info" th:text="${#aggregates.avg(bottles.![capacity])} + ' ml'"></h4>
+                                <small class="text-muted">Dung tích TB</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-warning" th:text="${#sets.size(bottles.![brand])}"></h4>
+                                <small class="text-muted">Số thương hiệu</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận xóa -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác Nhận Xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa bình giữ nhiệt <strong id="deleteItemName"></strong>?</p>
+                    <p class="text-danger"><small>Hành động này không thể hoàn tác!</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <form id="deleteForm" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Xóa
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(button) {
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-name');
+            
+            document.getElementById('deleteItemName').textContent = name;
+            document.getElementById('deleteForm').action = '/thermos/delete/' + id;
+            
+            const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            modal.show();
+        }
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

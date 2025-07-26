@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Quản Lý Bình Giữ Nhiệt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .login-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .login-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .login-form {
+            padding: 60px 40px;
+            background: white;
+        }
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 2rem;
+        }
+        .google-btn {
+            background: #db4437;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+        .google-btn:hover {
+            background: #c23321;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(219, 68, 55, 0.3);
+        }
+        .alert-custom {
+            border: none;
+            border-radius: 10px;
+            padding: 15px 20px;
+        }
+    </style>
+</head>
+<body>
+    <section class="login-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-7">
+                    <div class="card login-card">
+                        <div class="login-form text-center">
+                            <div class="login-icon">
+                                <i class="fas fa-coffee"></i>
+                            </div>
+                            
+                            <h2 class="fw-bold mb-3">Đăng Nhập</h2>
+                            <p class="text-muted mb-4">
+                                Vào hệ thống quản lý bình giữ nhiệt với tài khoản Google của bạn
+                            </p>
+
+                            <!-- Hiển thị lỗi nếu có -->
+                            <div th:if="${param.error}" class="alert alert-danger alert-custom mb-4">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Đăng nhập thất bại. Vui lòng thử lại!
+                            </div>
+
+                            <!-- Hiển thị thông báo đăng xuất -->
+                            <div th:if="${param.logout}" class="alert alert-success alert-custom mb-4">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Bạn đã đăng xuất thành công!
+                            </div>
+
+                            <!-- Nút đăng nhập Google -->
+                            <a href="/oauth2/authorization/google" class="google-btn">
+                                <i class="fab fa-google me-3"></i>
+                                Đăng Nhập với Google
+                            </a>
+
+                            <div class="mt-4">
+                                <small class="text-muted">
+                                    Bằng cách đăng nhập, bạn đồng ý với 
+                                    <a href="#" class="text-primary">Điều khoản sử dụng</a> 
+                                    của chúng tôi
+                                </small>
+                            </div>
+
+                            <div class="mt-4">
+                                <a href="/" class="btn btn-outline-primary">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Về Trang Chủ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin hướng dẫn -->
+                    <div class="text-center mt-4 text-white">
+                        <h5 class="mb-3">Tính năng chính:</h5>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <i class="fas fa-list me-2"></i>
+                                <small>Xem danh sách</small>
+                            </div>
+                            <div class="col-6">
+                                <i class="fas fa-plus me-2"></i>
+                                <small>Thêm mới</small>
+                            </div>
+                            <div class="col-6">
+                                <i class="fas fa-edit me-2"></i>
+                                <small>Cập nhật</small>
+                            </div>
+                            <div class="col-6">
+                                <i class="fas fa-trash me-2"></i>
+                                <small>Xóa dữ liệu</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
